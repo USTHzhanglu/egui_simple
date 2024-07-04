@@ -1,5 +1,5 @@
 use crate::config::fonts;
-use egui::{FontId, Label, RichText, TextEdit};
+use egui::{CentralPanel, Color32, FontId, RichText, ScrollArea, TextEdit, TopBottomPanel};
 
 use std::io::{BufRead, BufReader, Error, ErrorKind};
 use std::process::{Command, Stdio};
@@ -56,27 +56,26 @@ impl eframe::App for TemplateApp {
         //     });
         // });
 
-        egui::CentralPanel::default().show(ctx, |ui| {
-            ui.vertical_centered_justified(|ui| {
-                ui.label(RichText::new("大文本").font(FontId::proportional(40.0)));
-            });
-            // ui.separator();
-
-            egui::ScrollArea::vertical()
-                .stick_to_bottom(true)
-                .max_height(360.0)
-                .show(ui, |ui| {
-                    let label = TextEdit::multiline(&mut self.label)
-                        .text_color(egui::Color32::from_rgb(51, 255, 51))
-                        .interactive(false);
-                    ui.add(label);
-                });
-        });
-        egui::TopBottomPanel::bottom("bottom_panel").show(ctx, |ui| {
+        TopBottomPanel::bottom("bottom_panel").show(ctx, |ui| {
             ui.vertical_centered_justified(|ui| {
                 if ui.button("call cmd").clicked() {
                     call_cmd(&mut self.label).unwrap();
                 }
+            });
+        });
+
+        CentralPanel::default().show(ctx, |ui| {
+            ui.vertical_centered_justified(|ui| {
+                ui.separator();
+                ui.label(RichText::new("大文本").font(FontId::proportional(40.0)));
+                ui.separator();
+                ScrollArea::vertical().stick_to_bottom(true).show(ui, |ui| {
+                    let label = TextEdit::multiline(&mut self.label)
+                        .min_size(ui.available_size())
+                        .text_color(Color32::from_rgb(51, 255, 51))
+                        .interactive(false);
+                    ui.add(label);
+                });
             });
         });
     }
