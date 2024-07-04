@@ -3,5 +3,13 @@
     {
       "path": "."
     }
-  ]
+  ],
+  "extensions": {
+    "recommendations": [
+      "dan-c-underwood.arm",
+      "vadimcn.vscode-lldb",
+      "1yib.rust-bundle",
+      "tamasfe.even-better-toml"
+    ]
+  }
 }
